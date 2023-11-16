@@ -25,3 +25,4 @@ typer>=0.9.0
 typing_extensions>=4.5.0
 uvicorn[standard]==0.18.3
 PyYAML>=6.0.0
+security~=1.2.0+
