@@ -381,15 +381,18 @@ class FastAPI(ServerAPI):
         self,
         collection_id: UUID,
         ids: Optional[IDs] = None,
-        where: Optional[Where] = {},
+        where: Optional[Optional[Where]] = None,
         sort: Optional[str] = None,
         limit: Optional[int] = None,
         offset: Optional[int] = None,
         page: Optional[int] = None,
         page_size: Optional[int] = None,
-        where_document: Optional[WhereDocument] = {},
-        include: Include = ["metadatas", "documents"],
+        where_document: Optional[Optional[WhereDocument]] = None,
+        include: Optional[Include] = None,
     ) -> GetResult:
+        where = {} if where is None else where
+        where_document = {} if where_document is None else where_document
+        include = ["metadatas", "documents"] if include is None else include
         if page and page_size:
             offset = (page - 1) * page_size
             limit = page_size
@@ -426,10 +429,12 @@ class FastAPI(ServerAPI):
         self,
         collection_id: UUID,
         ids: Optional[IDs] = None,
-        where: Optional[Where] = {},
-        where_document: Optional[WhereDocument] = {},
+        where: Optional[Optional[Where]] = None,
+        where_document: Optional[Optional[WhereDocument]] = None,
     ) -> IDs:
         """Deletes embeddings from the database"""
+        where = {} if where is None else where
+        where_document = {} if where_document is None else where_document
         resp = self._session.post(
             self._api_url + "/collections/" + str(collection_id) + "/delete",
             data=json.dumps(
@@ -543,11 +548,14 @@ class FastAPI(ServerAPI):
         collection_id: UUID,
         query_embeddings: Embeddings,
         n_results: int = 10,
-        where: Optional[Where] = {},
-        where_document: Optional[WhereDocument] = {},
-        include: Include = ["metadatas", "documents", "distances"],
+        where: Optional[Optional[Where]] = None,
+        where_document: Optional[Optional[WhereDocument]] = None,
+        include: Optional[Include] = None,
     ) -> QueryResult:
         """Gets the nearest neighbors of a single embedding"""
+        where = {} if where is None else where
+        where_document = {} if where_document is None else where_document
+        include = ["metadatas", "documents", "distances"] if include is None else include
         resp = self._session.post(
             self._api_url + "/collections/" + str(collection_id) + "/query",
             data=json.dumps(

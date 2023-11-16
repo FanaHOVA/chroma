@@ -62,16 +62,18 @@ class DB(Component):
     @abstractmethod
     def get(
         self,
-        where: Where = {},
+        where: Optional[Where] = None,
         collection_name: Optional[str] = None,
         collection_uuid: Optional[UUID] = None,
         ids: Optional[IDs] = None,
         sort: Optional[str] = None,
         limit: Optional[int] = None,
         offset: Optional[int] = None,
-        where_document: WhereDocument = {},
+        where_document: Optional[WhereDocument] = None,
         columns: Optional[List[str]] = None,
     ) -> Sequence:  # type: ignore
+        where = {} if where is None else where
+        where_document = {} if where_document is None else where_document
         pass
 
     @abstractmethod
@@ -92,22 +94,26 @@ class DB(Component):
     @abstractmethod
     def delete(
         self,
-        where: Where = {},
+        where: Optional[Where] = None,
         collection_uuid: Optional[UUID] = None,
         ids: Optional[IDs] = None,
-        where_document: WhereDocument = {},
+        where_document: Optional[WhereDocument] = None,
     ) -> List[str]:
+        where = {} if where is None else where
+        where_document = {} if where_document is None else where_document
         pass
 
     @abstractmethod
     def get_nearest_neighbors(
         self,
         collection_uuid: UUID,
-        where: Where = {},
+        where: Optional[Where] = None,
         embeddings: Optional[Embeddings] = None,
         n_results: int = 10,
-        where_document: WhereDocument = {},
+        where_document: Optional[WhereDocument] = None,
     ) -> Tuple[List[List[UUID]], List[List[float]]]:
+        where = {} if where is None else where
+        where_document = {} if where_document is None else where_document
         pass
 
     @abstractmethod

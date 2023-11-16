@@ -167,7 +167,7 @@ class Collection(BaseModel):
         limit: Optional[int] = None,
         offset: Optional[int] = None,
         where_document: Optional[WhereDocument] = None,
-        include: Include = ["metadatas", "documents"],
+        include: Optional[Include] = None,
     ) -> GetResult:
         """Get embeddings and their associate data from the data store. If no ids or where filter is provided returns
         all embeddings up to limit starting at offset.
@@ -184,6 +184,7 @@ class Collection(BaseModel):
             GetResult: A GetResult object containing the results.
 
         """
+        include = ["metadatas", "documents"] if include is None else include
 
         valid_where = validate_where(where) if where else None
         valid_where_document = (
@@ -245,7 +246,7 @@ class Collection(BaseModel):
         n_results: int = 10,
         where: Optional[Where] = None,
         where_document: Optional[WhereDocument] = None,
-        include: Include = ["metadatas", "documents", "distances"],
+        include: Optional[Include] = None,
     ) -> QueryResult:
         """Get the n_results nearest neighbor embeddings for provided query_embeddings or query_texts.
 
@@ -268,6 +269,7 @@ class Collection(BaseModel):
             ValueError: If you provide both query_texts and query_images
 
         """
+        include = ["metadatas", "documents", "distances"] if include is None else include
 
         # Users must provide only one of query_embeddings, query_texts, query_images, or query_uris
         if not (

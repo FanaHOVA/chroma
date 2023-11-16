@@ -298,14 +298,14 @@ class BaseAPI(ABC):
         self,
         collection_id: UUID,
         ids: Optional[IDs] = None,
-        where: Optional[Where] = {},
+        where: Optional[Optional[Where]] = None,
         sort: Optional[str] = None,
         limit: Optional[int] = None,
         offset: Optional[int] = None,
         page: Optional[int] = None,
         page_size: Optional[int] = None,
-        where_document: Optional[WhereDocument] = {},
-        include: Include = ["embeddings", "metadatas", "documents"],
+        where_document: Optional[Optional[WhereDocument]] = None,
+        include: Optional[Include] = None,
     ) -> GetResult:
         """[Internal] Returns entries from a collection specified by UUID.
 
@@ -324,6 +324,9 @@ class BaseAPI(ABC):
             GetResult: The entries in the collection that match the query.
 
         """
+        where = {} if where is None else where
+        where_document = {} if where_document is None else where_document
+        include = ["embeddings", "metadatas", "documents"] if include is None else include
         pass
 
     @abstractmethod
@@ -331,8 +334,8 @@ class BaseAPI(ABC):
         self,
         collection_id: UUID,
         ids: Optional[IDs],
-        where: Optional[Where] = {},
-        where_document: Optional[WhereDocument] = {},
+        where: Optional[Optional[Where]] = None,
+        where_document: Optional[Optional[WhereDocument]] = None,
     ) -> IDs:
         """[Internal] Deletes entries from a collection specified by UUID.
 
@@ -345,6 +348,8 @@ class BaseAPI(ABC):
         Returns:
             IDs: The list of IDs of the entries that were deleted.
         """
+        where = {} if where is None else where
+        where_document = {} if where_document is None else where_document
         pass
 
     @abstractmethod
@@ -353,9 +358,9 @@ class BaseAPI(ABC):
         collection_id: UUID,
         query_embeddings: Embeddings,
         n_results: int = 10,
-        where: Where = {},
-        where_document: WhereDocument = {},
-        include: Include = ["embeddings", "metadatas", "documents", "distances"],
+        where: Optional[Where] = None,
+        where_document: Optional[WhereDocument] = None,
+        include: Optional[Include] = None,
     ) -> QueryResult:
         """[Internal] Performs a nearest neighbors query on a collection specified by UUID.
 
@@ -371,6 +376,9 @@ class BaseAPI(ABC):
         Returns:
             QueryResult: The results of the query.
         """
+        where = {} if where is None else where
+        where_document = {} if where_document is None else where_document
+        include = ["embeddings", "metadatas", "documents", "distances"] if include is None else include
         pass
 
     @abstractmethod

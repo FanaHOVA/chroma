@@ -450,15 +450,18 @@ class SegmentAPI(ServerAPI):
         self,
         collection_id: UUID,
         ids: Optional[IDs] = None,
-        where: Optional[Where] = {},
+        where: Optional[Optional[Where]] = None,
         sort: Optional[str] = None,
         limit: Optional[int] = None,
         offset: Optional[int] = None,
         page: Optional[int] = None,
         page_size: Optional[int] = None,
-        where_document: Optional[WhereDocument] = {},
-        include: Include = ["embeddings", "metadatas", "documents"],
+        where_document: Optional[Optional[WhereDocument]] = None,
+        include: Optional[Include] = None,
     ) -> GetResult:
+        where = {} if where is None else where
+        where_document = {} if where_document is None else where_document
+        include = ["embeddings", "metadatas", "documents"] if include is None else include
         add_attributes_to_current_span(
             {
                 "collection_id": str(collection_id),
@@ -627,10 +630,13 @@ class SegmentAPI(ServerAPI):
         collection_id: UUID,
         query_embeddings: Embeddings,
         n_results: int = 10,
-        where: Where = {},
-        where_document: WhereDocument = {},
-        include: Include = ["documents", "metadatas", "distances"],
+        where: Optional[Where] = None,
+        where_document: Optional[WhereDocument] = None,
+        include: Optional[Include] = None,
     ) -> QueryResult:
+        where = {} if where is None else where
+        where_document = {} if where_document is None else where_document
+        include = ["documents", "metadatas", "distances"] if include is None else include
         add_attributes_to_current_span(
             {
                 "collection_id": str(collection_id),
